@@ -1,0 +1,201 @@
+/*
+===================================================================================================
+VARIABLES
+===================================================================================================
+*/
+
+$base-color:#A7A7A7;
+$highlight-color:#127EB4;
+$mark-large-size:30px;
+$mark-medium-size:20px;
+$mark-small-size:15px;
+
+
+/*
+===================================================================================================
+MIXINS (not necessary if it's already present in the code)
+===================================================================================================
+*/
+
+/* CROSS PREFIX
+**************************************************************************************************/
+@mixin prefix($property, $value){
+  -webkit-#{$property}: #{$value};
+  -moz-#{$property}: #{$value};
+  -ms-#{$property}: #{$value};
+  -o-#{$property}: #{$value};
+  #{$property}: #{$value};
+}
+
+/* OPACITY
+**************************************************************************************************/
+@mixin opacity($value) {
+  $IEValue: $value*100;
+  opacity: $value;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+$IEValue+")";
+  filter: alpha(opacity= $IEValue);
+  -khtml-opacity: $value;
+  -moz-opacity:$value;
+  -webkit-opacity:$value;
+}
+
+/* BORDER
+**************************************************************************************************/
+@mixin border-radius($radius) {@include prefix('border-radius', $radius);}
+
+/* TRANSFORM
+**************************************************************************************************/
+@mixin transform($transform) {@include prefix('transform', $transform);}
+
+
+/*
+===================================================================================================
+RESET (not necessary if it's already present in the code)
+===================================================================================================
+*/
+
+html, body, div, span, ul, li, fieldset, form, label {vertical-align: baseline; font-family: inherit; font-weight: inherit; font-style: inherit; font-size: 100%; outline: 0; padding: 0; margin: 0; border: 0;}
+html * {margin: 0; padding: 0;}
+ul, ol {list-style:none;}
+*, *::before, *::after {@include prefix('box-sizing', 'border-box');}
+input[type=text]::-ms-clear, ::-ms-clear {display:none;}
+
+/*
+===================================================================================================
+GLOBAL (specific to style the example page)
+===================================================================================================
+*/
+
+html, body {font-family: 'Roboto', sans-serif; line-height: 100%;}
+body {padding: 40px;}
+ul {display: block; width: 100%; margin-bottom: 40px;
+  &:last-of-type {margin-bottom: 0;}
+}
+li {margin-bottom: 10px;
+  &:last-of-type {margin-bottom: 0;}
+}
+
+/*
+===================================================================================================
+MODULE
+===================================================================================================
+*/
+
+/* SELECTION (PARENT)
+**************************************************************************************************/
+
+.selection { display: inline-block; vertical-align: middle; background: none; overflow:hidden; position: relative; @include prefix ('user-select', 'none');
+  &:hover {background: none; cursor: pointer;}
+  input[type="radio"], input[type="checkbox"] {position: absolute; top:-100px; opacity: 0; height: 0; width: 0;}
+}
+
+
+
+/* MARK (CHILD)
+**************************************************************************************************/
+.selection--mark {display: inline-block; vertical-align: middle; border:1px solid $base-color;
+
+  /* ------------- HOVER STATE ------------- */
+  .selection:hover > & {border-color: $highlight-color;}
+  .selection:hover > input:disabled + & {border-color: inherit;}
+
+  /* ------------- CHECKED STATE ------------- */
+  input:checked + &::before {display: inline-block; vertical-align: top; position: absolute; border-color: $highlight-color; background: $highlight-color;}
+
+  /* ------------- DISABLED STATE ------------- */
+  input:disabled + & {opacity: 0.4; cursor: not-allowed; color: $base-color;}
+  input:disabled + &::before {border-color: $base-color; background: $base-color;}
+
+}
+
+
+/* CAPTION (CHILD)
+**************************************************************************************************/
+.selection--caption {display: inline-block; vertical-align: middle;
+  input:disabled ~ & {opacity: 0.4; cursor: not-allowed;}
+}
+
+
+/*
+===================================================================================================
+SUB MODULES
+===================================================================================================
+*/
+
+/* TYPE
+**************************************************************************************************/
+
+/* ------------- CHECKBOX (SUB MODULE) ------------- */
+.selection__check{
+  & input:checked + .selection--mark::before {content: ""; background-color: transparent; position: absolute; border-right-style: solid; border-bottom-style: solid; @include transform (rotate(45deg));}
+}
+
+
+/* ------------- RADIO BUTTON (SUB MODULE) ------------- */
+.selection__radio{
+  & .selection--mark {@include border-radius (50%);}
+  & input:checked + .selection--mark::before {content: ""; @include border-radius (50%);}
+}
+
+
+/* SIZE
+**************************************************************************************************/
+
+/* ------------- LARGE (SUB MODULE) ------------- */
+
+.selection__large{
+  /* CAPTION */
+  & .selection--caption{font-size: 19px;}
+
+  /* CHECKBOX */
+  &.selection__check {
+    .selection--mark{width: $mark-large-size; height: $mark-large-size; @include border-radius (4px);}
+    input:checked + .selection--mark::before {left: 10px; top: 2px; width: 10px; height: 22px; @include border-radius (3px);}
+  }
+
+  /* RADIO BUTTON */
+  &.selection__radio {
+    .selection--mark {width: $mark-large-size + 1; height: $mark-large-size + 1;}
+    input:checked + .selection--mark::before {top:6px; left: 6px; width: 19px; height: 19px;}
+  }
+}
+
+
+/* ------------- MEDIUM (SUB MODULE) ------------- */
+
+.selection__medium{
+  /* CAPTION */
+  & .selection--caption{font-size: 16px;}
+
+  /* CHECKBOX */
+  &.selection__check {
+    .selection--mark {width: $mark-medium-size; height: $mark-medium-size; @include border-radius (4px);}
+    input:checked + .selection--mark::before {left: 6px; top: 0; width: 8px; height: 15px; border-right-width:2.4px; border-bottom-width:2.4px;}
+  }
+
+  /* RADIO BUTTON */
+  &.selection__radio {
+    .selection--mark {width: $mark-medium-size + 1; height: $mark-medium-size + 1;}
+    input:checked + .selection--mark::before {top:5px; left: 5px; width: 11px; height: 11px;}
+  }
+
+}
+
+/* ------------- SMALL (SUB MODULE) ------------- */
+
+.selection__small{
+  /* CAPTION */
+  & .selection--caption{font-size: 14px;}
+
+  /* CHECKBOX */
+  &.selection__check {
+    .selection--mark{width: $mark-small-size; height: $mark-small-size; @include border-radius (3px);}
+    input:checked + .selection--mark::before {left: 5px; top: 2px; width: 5px; height: 11px; border-right-width:2px; border-bottom-width:2px;}
+  }
+
+  /* RADIO BUTTON */
+  &.selection__radio {
+    .selection--mark {width: $mark-small-size + 1; height: $mark-small-size + 1;}
+    input:checked + .selection--mark::before {top:5px; left: 4px; width: 8px; height: 8px;}
+  }
+}
