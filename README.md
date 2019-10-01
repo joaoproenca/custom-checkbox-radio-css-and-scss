@@ -4,7 +4,7 @@ CSS and SCSS only solution for custom checkboxes and radios buttons.
 
 ### **[View the Demo](https://joaoproenca.github.io/custom-checkbox-radio-css-and-scss/)**
 
-![Custom checkboxes and radios buttons](https://)
+![Custom checkboxes and radios buttons](https://joaoproenca.github.io/custom-checkbox-radio-css-and-scss/example/custom-checkbox-radio.gif)
 
 
 ## Include HTML
